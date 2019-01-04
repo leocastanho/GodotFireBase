@@ -225,8 +225,15 @@ public class FireBase extends Godot.SingletonBase {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				String data = Utils.readFromFile(fileName, activity);
-				data = data.replaceAll("\\s+", "");
+				initWithJson(data, script_id);
+			}
+		});
+	}
 
+	public void initWithJson(final String json, final int script_id) {
+		activity.runOnUiThread(new Runnable() {
+			public void run(){
+				String data = json.replaceAll("\\s+", "");
 				Utils.setScriptInstance(script_id);
 				initFireBase(data);
 			}
