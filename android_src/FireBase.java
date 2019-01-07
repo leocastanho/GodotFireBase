@@ -51,7 +51,7 @@ public class FireBase extends Godot.SingletonBase {
 
 	public FireBase(Activity p_activity) {
 		registerClass ("FireBase", new String[] {
-			"init", "initWithFile", "alert", "set_debug",
+			"init", "initWithFile", "initWithJson", "alert", "set_debug",
 
 			//Analytics++
 			"setScreenName", "sendAchievement", "send_custom", "send_events", "join_group", "level_up",

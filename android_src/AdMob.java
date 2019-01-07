@@ -75,37 +75,42 @@ public class AdMob {
 		AdMobConfig = FireBase.getConfig().optJSONObject("Ads");
 		MobileAds.initialize(activity, AdMobConfig.optString("AppId"));
 
-		if (AdMobConfig.optBoolean("BannerAd", false)) { createBanner(); }
-		if (AdMobConfig.optBoolean("InterstitialAd", false)) { createInterstitial(); }
-		if (AdMobConfig.optBoolean("RewardedVideoAd", false)) {
-			reward_ads = new HashMap<String, RewardedVideoAd>();
+		AdRequest.Builder.addTestDevice("61801CA1AA74E9F8089966D91B735A21")
 
-			String ad_unit_id = AdMobConfig.optString("RewardedVideoAdId", "");
-			List<String> ad_units = new ArrayList<String>();
-
-			if (ad_unit_id.length() <= 0) {
-				Utils.d("AdMob:RewardedVideo:UnitId:NotProvided");
-				ad_units.add(activity.getString(R.string.rewarded_video_ad_unit_id));
-			} else {
-				ad_units = Arrays.asList(ad_unit_id.split(","));
-
-				Utils.d("AdMob:RewardedVideo:" + String.valueOf(ad_units.size()) +":UnitIdS:Found");
-                Utils.d("AdMob:MultipleAdUnits:NotSupported_By_AdMob [AdMob SDK provided only single instance for rewarded_ads]");
-			}
-
-			for (String id : ad_units) {
-				RewardedVideoAd mrv = createRewardedVideo(id);
-				requestNewRewardedVideo(mrv, id);
-
-				reward_ads.put(id, mrv);
-			}
-		}
+		// if (AdMobConfig.optBoolean("BannerAd", false)) { createBanner(); }
+		// if (AdMobConfig.optBoolean("InterstitialAd", false)) { createInterstitial(); }
+		if (AdMobConfig.optBoolean("RewardedVideoAd", false)) { createRewardedVideo();}
 
 		mAdSize = new Dictionary();
 		mAdSize.put("width", 0);
 		mAdSize.put("height", 0);
 
         onStart();
+	}
+
+	public void createRewardedVideo() {
+		reward_ads = new HashMap<String, RewardedVideoAd>();
+
+		String ad_unit_id = AdMobConfig.optString("RewardedVideoAdId", "");
+		Utils.d("ad_unit_id = " + ad_unit_id);
+		List<String> ad_units = new ArrayList<String>();
+
+		if (ad_unit_id.length() <= 0) {
+			Utils.d("AdMob:RewardedVideo:UnitId:NotProvided");
+			ad_units.add(activity.getString(R.string.rewarded_video_ad_unit_id));
+		} else {
+			ad_units = Arrays.asList(ad_unit_id.split(","));
+
+			Utils.d("AdMob:RewardedVideo:" + String.valueOf(ad_units.size()) +":UnitIdS:Found");
+			Utils.d("AdMob:MultipleAdUnits:NotSupported_By_AdMob [AdMob SDK provided only single instance for rewarded_ads]");
+		}
+
+		for (String id : ad_units) {
+			RewardedVideoAd mrv = createRewardedVideo(id);
+			requestNewRewardedVideo(mrv, id);
+
+			reward_ads.put(id, mrv);
+		}
 	}
 
 	public Dictionary getBannerSize() {
