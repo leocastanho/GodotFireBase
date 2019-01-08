@@ -76,7 +76,7 @@ public class AdMob {
 		MobileAds.initialize(activity, AdMobConfig.optString("AppId"));
 
 		// if (AdMobConfig.optBoolean("BannerAd", false)) { createBanner(); }
-		// if (AdMobConfig.optBoolean("InterstitialAd", false)) { createInterstitial(); }
+		if (AdMobConfig.optBoolean("InterstitialAd", false)) { createInterstitial(); }
 		if (AdMobConfig.optBoolean("RewardedVideoAd", false)) { createRewardedVideo();}
 
 		mAdSize = new Dictionary();
@@ -228,7 +228,7 @@ public class AdMob {
 			}
 		});
 
-		requestNewInterstitial();
+		// requestNewInterstitial();
 	}
 
 	public void emitRewardedVideoStatus(final String unitid) {
@@ -429,7 +429,7 @@ public class AdMob {
 		mrv.loadAd(unitid, adRB.build());
 	}
 
-	private void requestNewInterstitial() {
+	public void requestNewInterstitial() {
 		AdRequest.Builder adRB = new AdRequest.Builder();
 
 		if (BuildConfig.DEBUG || AdMobConfig.optBoolean("TestAds", false)) {
