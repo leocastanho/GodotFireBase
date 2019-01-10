@@ -26,12 +26,16 @@ public class Crash {
 	}
 
 	public void init (FirebaseApp firebaseApp) {
-		mFirebaseApp = firebaseApp;
-
 		final Fabric fabric = new Fabric.Builder(activity)
                 .kits(new Crashlytics(), new CrashlyticsNdk())
                 .build();
 		Fabric.with(fabric);
+
+		if (userId != null) {
+			Crashlytics.setUserIdentifier(userId);
+		}
+
+		mFirebaseApp = firebaseApp;
 	}
 
 	public void crash() {
@@ -41,32 +45,35 @@ public class Crash {
 
 	public void log(final String message) {
 		if (!isInitialized()) return;
-		Crashlytics.getInstance().log(message);
+		Crashlytics.log(message);
 	}
 
 	public void setString(String key, String value) {
 		if (!isInitialized()) return;
-		Crashlytics.getInstance().setString(key, value);
+		Crashlytics.setString(key, value);
 	}
 
 	public void setBool(String key, boolean value) {
 		if (!isInitialized()) return;
-		Crashlytics.getInstance().setBool(key, value);
+		Crashlytics.setBool(key, value);
 	}
 
 	public void setReal(String key, double value) {
 		if (!isInitialized()) return;
-		Crashlytics.getInstance().setDouble(key, value);
+		Crashlytics.setDouble(key, value);
 	}
 
 	public void setInt(String key, int value) {
 		if (!isInitialized()) return;
-		Crashlytics.getInstance().setInt(key, value);
+		Crashlytics.setInt(key, value);
 	}
 
 	public void setUserId(String id) {
-		if (!isInitialized()) return;
-		Crashlytics.getInstance().setUserIdentifier(id);
+		if (!isInitialized()) {
+			userId = id;
+		} else {
+			Crashlytics.setUserIdentifier(id);
+		}
 	}
 
 	private boolean isInitialized() {
@@ -79,4 +86,6 @@ public class Crash {
 	private FirebaseApp mFirebaseApp = null;
 
 	private static Crash mInstance = null;
+
+	private String userId = null;
 }
