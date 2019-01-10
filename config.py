@@ -8,20 +8,21 @@ import shutil
 from colors import *
 
 # Set your Android app ID
-p_app_id = "com.your.appid"
+p_app_id = "com.godot.game"
 
 # Update this to customize the module
 _config = {
-"Analytics"      : True,
+"Analytics"      : False,
 "AdMob"          : True,
-"Invites"        : True,
-"RemoteConfig"   : True,
+"Invites"        : False,
+"RemoteConfig"   : False,
 "Notification"   : True,
 "Storage"        : False,
 "Firestore"      : False,
+"Crashlytics"    : True,
 
 "Authentication" : False,
-"AuthGoogle"     : True,
+"AuthGoogle"     : False,
 "AuthFacebook"   : False,
 "AuthTwitter"    : False
 }
@@ -38,6 +39,7 @@ FILES_LIST		= \
 "RemoteConfig"	: ["RemoteConfig.java"],
 "Storage"	: ["storage/"],
 "Firestore"	: ["Firestore.java"],
+"Crashlytics" : ["Crash.java"],
 
 "AuthGoogle"    : ["GoogleSignIn.java"],
 "AuthFacebook"  : ["FacebookSignIn.java"],
@@ -48,7 +50,7 @@ directory = "android"
 empty_line = re.compile(r'^\s*$')
 
 def can_build(plat):
-    return update_module() if plat == "android" else True
+    return update_module() if plat == "android" else False
     #return False
 
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -132,7 +134,7 @@ def update_module():
 
     data_to_check = \
     ["Analytics", "AdMob", "Auth", "Invites", "Notification", "RemoteConfig",\
-    "Storage", "Firestore", "AuthFacebook", "AuthGoogle", "AuthTwitter"]
+    "Storage", "Firestore", "Crashlytics", "AuthFacebook", "AuthGoogle", "AuthTwitter"]
 
     regex_list = []
 
@@ -238,6 +240,12 @@ def configure(env):
 
         if _config["Firestore"]:
             env.android_add_dependency("compile 'com.google.firebase:firebase-firestore:17.1.0'")
+
+        if _config["Crashlytics"]:
+            env.android_add_gradle_classpath("io.fabric.tools:gradle:1.26.1")
+            env.android_add_dependency("compile 'com.crashlytics.sdk.android:crashlytics:2.9.8'")
+            env.android_add_dependency("compile 'com.crashlytics.sdk.android:crashlytics-ndk:2.0.5'")
+            env.android_add_gradle_plugin("io.fabric")
 
         env.android_add_dependency("compile 'commons-codec:commons-codec:1.10'")
 

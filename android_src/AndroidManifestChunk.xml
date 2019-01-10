@@ -57,3 +57,4 @@
 	android:resource="@color/colorAccent" />
 	<!-- Notification -->
 
+	<meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
