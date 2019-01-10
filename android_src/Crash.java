@@ -39,9 +39,34 @@ public class Crash {
 		Crashlytics.getInstance().crash();
 	}
 
-	public void log(final String p_message) {
+	public void log(final String message) {
 		if (!isInitialized()) return;
-		Crashlytics.getInstance().log(p_message);
+		Crashlytics.getInstance().log(message);
+	}
+
+	public void setString(String key, String value) {
+		if (!isInitialized()) return;
+		Crashlytics.getInstance().setString(key, value);
+	}
+
+	public void setBool(String key, boolean value) {
+		if (!isInitialized()) return;
+		Crashlytics.getInstance().setBool(key, value);
+	}
+
+	public void setReal(String key, double value) {
+		if (!isInitialized()) return;
+		Crashlytics.getInstance().setDouble(key, value);
+	}
+
+	public void setInt(String key, int value) {
+		if (!isInitialized()) return;
+		Crashlytics.getInstance().setInt(key, value);
+	}
+
+	public void setUserId(String id) {
+		if (!isInitialized()) return;
+		Crashlytics.getInstance().setUserIdentifier(id);
 	}
 
 	private boolean isInitialized() {
