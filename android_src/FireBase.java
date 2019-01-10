@@ -106,8 +106,12 @@ public class FireBase extends Godot.SingletonBase {
 			//Storage--
 
 			//Firestore++
-			"load_document", "load_document_to", "set_document", "add_document"
+			"load_document", "load_document_to", "set_document", "add_document",
 			//Firestore--
+
+			//Crashlytics++
+			"crash", "crash_log"
+			//Crashlytics--
 		});
 
 		activity = p_activity;
@@ -124,7 +128,7 @@ public class FireBase extends Godot.SingletonBase {
 			return;
 		}
 
-		try { 
+		try {
 			config = new JSONObject(data);
 			firebaseConfig = config;
 		} catch (JSONException e) { Utils.d("JSON Parse error: " + e.toString()); }
@@ -189,6 +193,13 @@ public class FireBase extends Godot.SingletonBase {
 			Firestore.getInstance(activity).init(mFirebaseApp);
 		}
 		//Firestore--
+
+		//Crashlytics++
+		if (config.optBoolean("Crashlytics", false)) {
+			Utils.d("Initializing Crashlytics.");
+			Crash.getInstance(activity).init(mFirebaseApp);
+		}
+		//Crashlytics--
 
 		Utils.d("FireBase initialized.");
 	}
@@ -619,7 +630,7 @@ public class FireBase extends Godot.SingletonBase {
 			}
 		});
     }
-    
+
 	public void notifyOnComplete(final Dictionary data, final int seconds) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
@@ -775,6 +786,16 @@ public class FireBase extends Godot.SingletonBase {
 	}
 	//Firestore--
 
+	//Crashlytics++
+	public void crash() {
+		Crash.getInstance(activity).crash();
+	}
+
+	public void crash_log(final String message) {
+		Crash.getInstance(activity).log(message);
+	}
+	//Crashlytics--
+
 	/** Main Funcs **/
 	public static JSONObject getConfig() {
 		return firebaseConfig;
@@ -809,7 +830,7 @@ public class FireBase extends Godot.SingletonBase {
 		Auth.getInstance(activity).onPause();
 		//Auth--
 
-	
+
 		//AdMob++
 		AdMob.getInstance(activity).onPause();
 		//AdMob--

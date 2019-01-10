@@ -8,7 +8,7 @@ import shutil
 from colors import *
 
 # Set your Android app ID
-p_app_id = "com.javarygames.jumpdown"
+p_app_id = "com.godot.game"
 
 # Update this to customize the module
 _config = {
@@ -50,7 +50,7 @@ directory = "android"
 empty_line = re.compile(r'^\s*$')
 
 def can_build(plat):
-    return update_module() if plat == "android" else True
+    return update_module() if plat == "android" else False
     #return False
 
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -244,6 +244,7 @@ def configure(env):
         if _config["Crashlytics"]:
             env.android_add_gradle_classpath("io.fabric.tools:gradle:1.26.1")
             env.android_add_dependency("compile 'com.crashlytics.sdk.android:crashlytics:2.9.8'")
+            env.android_add_dependency("compile 'com.crashlytics.sdk.android:crashlytics-ndk:2.0.5'")
             env.android_add_gradle_plugin("io.fabric")
 
         env.android_add_dependency("compile 'commons-codec:commons-codec:1.10'")
