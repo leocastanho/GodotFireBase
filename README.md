@@ -31,6 +31,8 @@ Godot_FireBase is a firebase integration for godot android;
 
 > Firestore (W.I.P)
 
+> Crashlytics
+
 # Build/Compile module
 
 * Copy your `google-services.json` file to `[GODOT-ROOT]/platform/android/java/`
@@ -89,8 +91,9 @@ GodotFireBase config file, By default every feature is disabled.
 	"Notification" : true,
 	"Storage" : true,
 	"Firestore" : true,
+    "Crashlytics" : true,
 
-	"AuthConf" : 
+	"AuthConf" :
 	{
 		"Google" : true,
 		"Twitter" : true,
@@ -98,7 +101,7 @@ GodotFireBase config file, By default every feature is disabled.
 		"FacebookAppId" : "1234566789875"
 	},
 
-	"Ads" : 
+	"Ads" :
 	{
 		"AppId": "YOUR_APP_ID_HERE",
 		"BannerAd" : true,
@@ -318,6 +321,18 @@ firebase.set_document("collection_name", "document_name", data) # Set document d
 firebase.load_document("collection_name") # load or retrive from the server,
 
 # Note: documents will be sent to the `_receive_message` function as json
+```
+
+# Firebase Crashlytics
+
+```gdscript
+firebase.crash() # Make the game crash for testing purposes
+firebase.crash_log("message") # Add a custom log message that will be shown in crash reports
+firebase.crash_set_user_id(OS.get_unique_id()) # Set the user id to detect if the same user is having crashes
+firebase.crash_set_string("key", "value") # Set a string key to be in the crash report
+firebase.crash_set_bool("key", true) # Set a boolean key to be in the crash report
+firebase.crash_set_int("key", 42) # Set an integer key to be in the crash report
+firebase.crash_set_real("key", 3.14) # Set a real number key to be in the crash report
 ```
 
 # Note
