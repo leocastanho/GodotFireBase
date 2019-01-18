@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.os.Bundle;
-
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -170,7 +169,7 @@ public class Analytics {
 
 		// Generate bundle out of keyValues
 		Bundle bundle = new Bundle();
-		if (keyValues.isEmpty()){
+		if (!keyValues.isEmpty()){
 			Utils.putAllInDict(bundle, keyValues);
 		}
 		// Dispatch event
