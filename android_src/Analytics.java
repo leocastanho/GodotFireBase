@@ -170,8 +170,9 @@ public class Analytics {
 
 		// Generate bundle out of keyValues
 		Bundle bundle = new Bundle();
-		Utils.putAllInDict(bundle, keyValues);
-
+		if (keyValues.isEmpty()){
+			Utils.putAllInDict(bundle, keyValues);
+		}
 		// Dispatch event
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(activity);
 		mFirebaseAnalytics.logEvent(eventName, bundle);
