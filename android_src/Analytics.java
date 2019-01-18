@@ -21,6 +21,8 @@ import android.content.Context;
 import android.util.Log;
 import android.os.Bundle;
 
+import java.util.Dictionary;
+
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -166,12 +168,13 @@ public class Analytics {
 		Utils.d("Sending:Tutorial:Complete");
 	}
 
-	public void send_events(String eventName, Dictionary keyValues) {
+	public void send_events(String eventName, Dictionary<K,V> keyValues) {
 
 		// Generate bundle out of keyValues
 		Bundle bundle = new Bundle();
-		Utils.putAllInDict(bundle, keyValues);
-
+		if (!keyValues.isEmpty()){
+			Utils.putAllInDict(bundle, keyValues);
+		}
 		// Dispatch event
 		mFirebaseAnalytics = FirebaseAnalytics.getInstance(activity);
 		mFirebaseAnalytics.logEvent(eventName, bundle);
