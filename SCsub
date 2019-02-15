@@ -5,6 +5,7 @@ Import('env')
 module_env = env.Clone()
 module_env.add_source_files(env.modules_sources, "*.cpp")
 module_env.add_source_files(env.modules_sources, "src/*.cpp")
+if (env["platform"] == "iphone"):
+    module_env.add_source_files(env.modules_sources, "ios_src/*.mm")
 module_env.Append(CXXFLAGS=['-O2', '-std=c++11'])
 module_env.Append(CPPPATH=['#', '.', 'src'])
-

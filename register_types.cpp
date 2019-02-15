@@ -1,4 +1,5 @@
 #include "register_types.h"
+#include "ios_src/godotFirebase.h"
 
 #include "crashlytics.h"
 #include "core/print_string.h"
@@ -19,6 +20,8 @@ void crashlytics_print_handler(void *p_this, const String &p_string, bool p_erro
 }
 
 void register_GodotFireBase_types() {
+    Engine::get_singleton()->add_singleton(Engine::Singleton("FireBase", memnew(GodotFirebase)));
+    
     crashlytics_context = crashlytics_init();
     phl = memnew(PrintHandlerList);
     phl->printfunc = crashlytics_print_handler;

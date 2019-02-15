@@ -50,8 +50,12 @@ directory = "android"
 empty_line = re.compile(r'^\s*$')
 
 def can_build(plat):
-    return update_module() if plat == "android" else False
-    #return False
+    if plat == "android":
+        return update_module()
+    elif plat == "iphone":
+        return True
+    else:
+        return False
 
 def copytree(src, dst, symlinks=False, ignore=None):
     for item in os.listdir(src):
@@ -255,3 +259,7 @@ def configure(env):
         env.android_add_to_permissions("android/AndroidPermissionsChunk.xml");
         env.android_add_default_config("minSdkVersion 15")
         env.android_add_default_config("applicationId '"+ p_app_id +"'")
+    
+    elif env["platform"] == "iphone":
+        env.Append(FRAMEWORKPATH=['modules/GodotFirebase/ios_src/lib'])
+        env.Append(LINKFLAGS=['-ObjC', '-framework','AdSupport', '-framework','CoreTelephony', '-framework','EventKit', '-framework','EventKitUI', '-framework','MessageUI', '-framework','StoreKit', '-framework','SafariServices', '-framework','CoreBluetooth', '-framework','AssetsLibrary', '-framework','CoreData', '-framework','CoreLocation', '-framework','CoreText', '-framework','ImageIO', '-framework', 'GLKit', '-framework','CoreVideo', '-framework', 'CFNetwork', '-framework', 'MobileCoreServices', '-framework', 'FirebaseAnalytics', '-framework', 'FIRAnalyticsConnector', '-framework', 'FirebaseCoreDiagnostics', '-framework', 'FirebaseCore', '-framework', 'FirebaseInstanceID', '-framework', 'GoogleAppMeasurement', '-framework', 'GoogleUtilities', '-framework', 'nanopb', '-framework', 'GoogleMobileAds'])
