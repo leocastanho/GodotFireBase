@@ -9,7 +9,7 @@
 #endif
 
 //GADInterstitial *interstitial = NULL;
-NSMutableDictionary *config = NULL;
+NSDictionary *config = NULL;
 
 GodotFirebase::GodotFirebase() {
 }
@@ -28,19 +28,7 @@ void GodotFirebase::initWithJson(const String &json, const int script_id) {
     interstitialAd = [GodotFirebaseInterstitialAd alloc];
     [interstitialAd init: config: script_id];
     
-    // NSLog(@"Config parsed from objective-c, ads and interstitialadid are:");
-    // NSLog(config[@"Ads"]);
-    // NSLog(config[@"Ads"][@"InterstitialAdId"]);
-    
 }
-
-/*void GodotRateIt::ask_and_rate(const String &message, const String &positive_button_text, const String &negative_button_text, const String &app_id) {
-    do_ios_rate(app_id);
-}
-
-void GodotRateIt::rate(const String &url_prefix, const String &url_prefix_fallback, const String &id_format, const String &app_id) {
-    do_ios_rate(app_id); TODO remove
-}*/
 
 void GodotFirebase::load_interstitial() {
     NSLog(@"load_insterstitial from ObjC");
