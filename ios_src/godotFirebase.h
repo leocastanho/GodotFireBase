@@ -8,12 +8,17 @@
 #ifdef __OBJC__
 
 #import "Firebase.h"
+
 @class GodotFirebaseInterstitialAd;
 typedef GodotFirebaseInterstitialAd *interstitialAdPtr;
 
+@class GodotFirebaseRewardedVideo;
+typedef GodotFirebaseRewardedVideo *rewardedVideoPtr;
+
 #else
 
-typedef void *interstitialAdPtr; // GodotFirebaseInterstitialAd
+typedef void *interstitialAdPtr;
+typedef void *rewardedVideoPtr;
 
 #endif
 
@@ -27,6 +32,7 @@ class GodotFirebase : public Reference {
 #endif
     
     interstitialAdPtr interstitialAd;
+    rewardedVideoPtr rewardedVideo;
     
 protected:
     // void do_ios_rate(const String &app_id); TODO remove
@@ -38,9 +44,8 @@ public:
     void load_interstitial();
     void show_interstitial_ad();
     
-    // void ask_and_rate(const String &message, const String &positive_button_text, const String &negative_button_text, const String &app_id); TODO remove
-    
-    // void rate(const String &url_prefix, const String &url_prefix_fallback, const String &id_format, const String &app_id); TODO remove
+    void load_rewarded_video();
+    void show_rewarded_video();
     
     GodotFirebase();
     ~GodotFirebase();

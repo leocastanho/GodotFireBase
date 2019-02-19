@@ -28,6 +28,8 @@ void GodotFirebase::initWithJson(const String &json, const int script_id) {
     interstitialAd = [GodotFirebaseInterstitialAd alloc];
     [interstitialAd init: config: script_id];
     
+    rewardedVideo = [GodotFirebaseRewardedVideo alloc];
+    [rewardedVideo init: config: script_id];
 }
 
 void GodotFirebase::load_interstitial() {
@@ -42,17 +44,28 @@ void GodotFirebase::show_interstitial_ad() {
     
 }
 
+void GodotFirebase::load_rewarded_video() {
+    NSLog(@"load rewarded video from ObjC");
+    [rewardedVideo load];
+}
+
+void GodotFirebase::show_rewarded_video() {
+    NSLog(@"show rewarded video from ObjC");
+    [rewardedVideo show];
+}
+
 void GodotFirebase::_bind_methods() {
     CLASS_DB::bind_method("initWithJson", &GodotFirebase::initWithJson);
     
     // Admob functions
     CLASS_DB::bind_method("load_interstitial", &GodotFirebase::load_interstitial);
     CLASS_DB::bind_method("show_interstitial_ad", &GodotFirebase::show_interstitial_ad);
+    CLASS_DB::bind_method("load_rewarded_video", &GodotFirebase::load_rewarded_video);
+    CLASS_DB::bind_method("show_rewarded_video", &GodotFirebase::show_rewarded_video);
     
     /*
      Admob related functions to be implemented:
      
-    "show_interstitial_ad", "show_rewarded_video",
     "is_interstitial_loaded", "is_rewarded_video_loaded","load_rewarded_video",
     "load_interstitial"
      

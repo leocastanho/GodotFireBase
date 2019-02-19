@@ -3,7 +3,6 @@
 
 @interface GodotFirebaseInterstitialAd: UIViewController <GADInterstitialDelegate> {
     GADInterstitial *interstitial;
-    NSDictionary* config;
     NSString* ad_id;
     int script_id;
 }

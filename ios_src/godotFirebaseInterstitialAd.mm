@@ -12,7 +12,6 @@
 
 - (void) load; {
     NSLog(@"Calling load from interstitial");
-    NSLog( @"%@", ad_id);
     interstitial = [[GADInterstitial alloc]
                                      initWithAdUnitID:ad_id];
     interstitial.delegate = self;
