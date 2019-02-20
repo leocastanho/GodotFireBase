@@ -15,10 +15,14 @@ typedef GodotFirebaseInterstitialAd *interstitialAdPtr;
 @class GodotFirebaseRewardedVideo;
 typedef GodotFirebaseRewardedVideo *rewardedVideoPtr;
 
+@class GodotFirebaseAnalytics;
+typedef GodotFirebaseAnalytics *analyticsPtr;
+
 #else
 
 typedef void *interstitialAdPtr;
 typedef void *rewardedVideoPtr;
+typedef void *analyticsPtr;
 
 #endif
 
@@ -33,6 +37,7 @@ class GodotFirebase : public Reference {
     
     interstitialAdPtr interstitialAd;
     rewardedVideoPtr rewardedVideo;
+    analyticsPtr analytics;
     
 protected:
     // void do_ios_rate(const String &app_id); TODO remove
@@ -46,6 +51,9 @@ public:
     
     void load_rewarded_video();
     void show_rewarded_video();
+    
+    void setScreenName(const String &screen_name);
+    void send_events(const String &event_name, const Dictionary& key_values);
     
     GodotFirebase();
     ~GodotFirebase();

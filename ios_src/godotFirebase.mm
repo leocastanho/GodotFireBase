@@ -30,6 +30,9 @@ void GodotFirebase::initWithJson(const String &json, const int script_id) {
     
     rewardedVideo = [GodotFirebaseRewardedVideo alloc];
     [rewardedVideo init: config: script_id];
+    
+    analytics = [GodotFirebaseAnalytics alloc];
+    [analytics init];
 }
 
 void GodotFirebase::load_interstitial() {
@@ -54,6 +57,17 @@ void GodotFirebase::show_rewarded_video() {
     [rewardedVideo show];
 }
 
+void GodotFirebase::setScreenName(const String &screen_name) {
+    NSLog(@"set screen name from ObjC");
+    [analytics setScreenName: [NSString stringWithCString:screen_name.utf8().get_data() encoding: NSUTF8StringEncoding]];
+}
+
+void GodotFirebase::send_events(const String &event_name, const Dictionary& key_values) {
+    NSLog(@"send events from ObjC");
+    NSLog(@"GodotFirebase::send_events with values size: %lf", key_values.size());
+    [analytics send_events:[NSString stringWithCString:event_name.utf8().get_data() encoding: NSUTF8StringEncoding]: key_values];
+}
+
 void GodotFirebase::_bind_methods() {
     CLASS_DB::bind_method("initWithJson", &GodotFirebase::initWithJson);
     
@@ -62,6 +76,8 @@ void GodotFirebase::_bind_methods() {
     CLASS_DB::bind_method("show_interstitial_ad", &GodotFirebase::show_interstitial_ad);
     CLASS_DB::bind_method("load_rewarded_video", &GodotFirebase::load_rewarded_video);
     CLASS_DB::bind_method("show_rewarded_video", &GodotFirebase::show_rewarded_video);
+    CLASS_DB::bind_method("setScreenName",  &GodotFirebase::setScreenName);
+    CLASS_DB::bind_method("send_events", &GodotFirebase::send_events);
     
     /*
      Admob related functions to be implemented:
