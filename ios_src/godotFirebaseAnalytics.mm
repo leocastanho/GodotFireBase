@@ -20,9 +20,21 @@
 - (void) send_events: (NSString *) event_name: (Dictionary *)  key_values; {
     NSLog(@"Sending analytics event");
     NSLog(@"Name: %@", event_name);
-    // NSLog(@"Data: %@", key_values);
     
-    // TODO send analytics to firebase
+    // Convert godot dictionary to objc nsdictionary
+    NSMutableDictionary *event_parameters = [NSMutableDictionary new];
+    List<Variant> keys;
+    key_values->get_key_list(&keys);
+    for (List<Variant>::Element *E = keys.front(); E; E = E->next()) {
+        String key = E->get();
+        Variant *value = key_values->getptr(key);
+        String string_value = (String)*value;
+        
+        event_parameters[[NSString stringWithCString:key.utf8().get_data() encoding: NSUTF8StringEncoding]] = [NSString stringWithCString:string_value.utf8().get_data() encoding: NSUTF8StringEncoding];
+    }
+    
+    // send data to firebase
+    [FIRAnalytics logEventWithName:event_name parameters:event_parameters];
 }
 
 
