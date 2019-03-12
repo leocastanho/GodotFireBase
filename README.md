@@ -36,10 +36,10 @@ Godot_FireBase is a firebase integration for godot android;
 # Build/Compile module
 
 * Copy your `google-services.json` file to `[GODOT-ROOT]/platform/android/java/`
-* Edit file modules/FireBase/config.py at line 11
+* Edit file modules/FireBase/app_config.py
 
 ```
-p_app_id = "com.your.appid"     # config.py L:11
+p_app_id = "com.your.appid"
 ```
 
 * Replay `com.your.appid` with you android application id.

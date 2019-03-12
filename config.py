@@ -7,25 +7,7 @@ import shutil
 
 from colors import *
 
-# Set your Android app ID
-p_app_id = "com.godot.game"
-
-# Update this to customize the module
-_config = {
-"Analytics"      : False,
-"AdMob"          : True,
-"Invites"        : False,
-"RemoteConfig"   : False,
-"Notification"   : True,
-"Storage"        : False,
-"Firestore"      : False,
-"Crashlytics"    : True,
-
-"Authentication" : False,
-"AuthGoogle"     : False,
-"AuthFacebook"   : False,
-"AuthTwitter"    : False
-}
+from app_config import p_config, p_app_id
 
 FILES_LIST		= \
 {
@@ -127,9 +109,9 @@ def update_module():
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
 
-    _config["Auth"] = _config["Authentication"]
+    p_config["Auth"] = p_config["Authentication"]
 
-    if (_config["Storage"] or _config["Firestore"]) and not _config["Auth"]:
+    if (p_config["Storage"] or p_config["Firestore"]) and not p_config["Auth"]:
         sys.stdout.write(RED)
         print("Storage/Firestore needs FireBase Authentication, Skipping `GodotFireBase` module")
         sys.stdout.write(RESET)
@@ -144,14 +126,14 @@ def update_module():
 
     for _file in FILES_LIST["Base"]: shutil.copyfile(src_dir+_file, target_dir+_file)
 
-    if not _config["Auth"]:
-        _config["AuthGoogle"] = False
-        _config["AuthFacebook"] = False
-        _config["AuthTwitter"] = False
+    if not p_config["Auth"]:
+        p_config["AuthGoogle"] = False
+        p_config["AuthFacebook"] = False
+        p_config["AuthTwitter"] = False
 
     dbg_msg = ""
     for d in data_to_check:
-        if not _config[d]:
+        if not p_config[d]:
             regex_list.append(\
             [re.compile(r'([\/]+'+d+'[\+]+)'), re.compile(r'([\/]+'+d+'[\-]+)')])
         else:
@@ -171,14 +153,14 @@ def update_module():
     # Copy FireBase.java file into memory
     parse_java_file(src_dir+"FireBase.java", target_dir+"FireBase.java", regex_list)
 
-    if _config["Auth"] and (not _config["AuthGoogle"] or not _config["AuthFacebook"] or not _config["AuthTwitter"]):
+    if p_config["Auth"] and (not p_config["AuthGoogle"] or not p_config["AuthFacebook"] or not p_config["AuthTwitter"]):
         parse_java_file(src_dir+"auth/Auth.java", target_dir+"auth/Auth.java", regex_list)
 
     # Parsing AndroidManifest
     regex_list = []
 
     for d in data_to_check:
-        if not _config[d]:
+        if not p_config[d]:
             regex_list.append(\
             [re.compile(r'(<\![\-]+ '+d+' [\-]+>)'), re.compile(r'(<\![\-]+ '+d+' [\-]+>)')])
 
@@ -212,40 +194,40 @@ def configure(env):
         env.android_add_dependency("compile 'com.google.firebase:firebase-analytics:16.0.1'")
         env.android_add_dependency("compile 'com.google.android.gms:play-services-measurement-base:16.0.0'")
 
-        if _config["Auth"]:
+        if p_config["Auth"]:
             env.android_add_dependency("compile 'com.google.firebase:firebase-auth:16.0.3'")
-            if _config["AuthGoogle"]:
+            if p_config["AuthGoogle"]:
                 env.android_add_dependency("compile 'com.google.android.gms:play-services-auth:16.0.0'")
 
-            if _config["AuthFacebook"]:
+            if p_config["AuthFacebook"]:
                 env.android_add_dependency("compile 'com.facebook.android:facebook-android-sdk:4.18.0'")
 
-            if _config["AuthTwitter"]:
+            if p_config["AuthTwitter"]:
                 env.android_add_dependency(\
                 "compile('com.twitter.sdk.android:twitter-core:1.6.6@aar') { transitive = true }")
                 env.android_add_dependency(\
                 "compile('com.twitter.sdk.android:twitter:1.13.1@aar') { transitive = true }")
 
-        if _config["AdMob"]:
+        if p_config["AdMob"]:
             env.android_add_dependency("compile 'com.google.firebase:firebase-ads:15.0.1'")
 
-        if _config["RemoteConfig"]:
+        if p_config["RemoteConfig"]:
             env.android_add_dependency("compile 'com.google.firebase:firebase-config:16.0.0'")
 
-        if _config["Notification"]:
+        if p_config["Notification"]:
             env.android_add_dependency("compile 'com.google.firebase:firebase-messaging:17.3.0'")
             env.android_add_dependency("compile 'com.firebase:firebase-jobdispatcher:0.8.5'")
 
-        if _config["Invites"]:
+        if p_config["Invites"]:
             env.android_add_dependency("compile 'com.google.firebase:firebase-invites:16.0.3'")
 
-        if _config["Storage"]:
+        if p_config["Storage"]:
             env.android_add_dependency("compile 'com.google.firebase:firebase-storage:16.0.1'")
 
-        if _config["Firestore"]:
+        if p_config["Firestore"]:
             env.android_add_dependency("compile 'com.google.firebase:firebase-firestore:17.1.0'")
 
-        if _config["Crashlytics"]:
+        if p_config["Crashlytics"]:
             env.android_add_gradle_classpath("io.fabric.tools:gradle:1.26.1")
             env.android_add_dependency("compile 'com.crashlytics.sdk.android:crashlytics:2.9.8'")
             env.android_add_dependency("compile 'com.crashlytics.sdk.android:crashlytics-ndk:2.0.5'")
@@ -259,7 +241,7 @@ def configure(env):
         env.android_add_to_permissions("android/AndroidPermissionsChunk.xml");
         env.android_add_default_config("minSdkVersion 15")
         env.android_add_default_config("applicationId '"+ p_app_id +"'")
-    
+
     elif env["platform"] == "iphone":
         env.Append(FRAMEWORKPATH=['modules/GodotFirebase/ios_src/lib'])
         env.Append(LINKFLAGS=['-ObjC', '-framework','AdSupport', '-framework','CoreTelephony', '-framework','EventKit', '-framework','EventKitUI', '-framework','MessageUI', '-framework','StoreKit', '-framework','SafariServices', '-framework','CoreBluetooth', '-framework','AssetsLibrary', '-framework','CoreData', '-framework','CoreLocation', '-framework','CoreText', '-framework','ImageIO', '-framework', 'GLKit', '-framework','CoreVideo', '-framework', 'CFNetwork', '-framework', 'MobileCoreServices', '-framework', 'FirebaseAnalytics', '-framework', 'FIRAnalyticsConnector', '-framework', 'FirebaseCoreDiagnostics', '-framework', 'FirebaseCore', '-framework', 'FirebaseInstanceID', '-framework', 'GoogleAppMeasurement', '-framework', 'GoogleUtilities', '-framework', 'nanopb', '-framework', 'GoogleMobileAds'])
