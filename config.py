@@ -232,6 +232,19 @@ def configure(env):
             env.android_add_dependency("compile 'com.crashlytics.sdk.android:crashlytics:2.9.8'")
             env.android_add_dependency("compile 'com.crashlytics.sdk.android:crashlytics-ndk:2.0.5'")
             env.android_add_gradle_plugin("io.fabric")
+            env.android_add_gradle_content("""
+crashlytics {
+    enableNdk true
+    manifestPath 'AndroidManifest.xml'
+    androidNdkOut '../../../'
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('assemble')) {
+        task.finalizedBy "crashlyticsUploadSymbols" + task.name.substring('assemble'.length())
+    }
+}
+            """)
 
         env.android_add_dependency("compile 'commons-codec:commons-codec:1.10'")
 
