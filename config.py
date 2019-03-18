@@ -246,6 +246,11 @@ tasks.whenTaskAdded { task ->
 }
             """)
 
+        if p_config["MediationTapjoy"]:
+            env.android_add_dependency("implementation 'com.tapjoy:tapjoy-android-sdk:12.1.0'")
+            env.android_add_dependency("implementation 'com.google.ads.mediation:tapjoy:12.1.0.0'")
+
+
         env.android_add_dependency("compile 'commons-codec:commons-codec:1.10'")
 
         env.android_add_java_dir("android");
