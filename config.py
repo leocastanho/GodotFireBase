@@ -238,12 +238,6 @@ crashlytics {
     manifestPath 'AndroidManifest.xml'
     androidNdkOut '../../../'
 }
-
-tasks.whenTaskAdded { task ->
-    if (task.name.startsWith('assemble')) {
-        task.finalizedBy "crashlyticsUploadSymbols" + task.name.substring('assemble'.length())
-    }
-}
             """)
 
         if "MediationTapjoy" in p_config and p_config["MediationTapjoy"]:
