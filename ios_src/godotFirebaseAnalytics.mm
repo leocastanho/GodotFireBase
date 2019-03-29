@@ -1,6 +1,6 @@
 
 #import "godotFirebaseAnalytics.h"
-#include "reference.h"
+#include "core/reference.h"
 
 #import "Firebase.h"
 
