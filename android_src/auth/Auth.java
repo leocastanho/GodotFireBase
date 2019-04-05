@@ -77,6 +77,18 @@ public class Auth {
 			TwitterSignIn.getInstance(activity).init();
 		}
 		//AuthTwitter--
+
+		//AuthAnonymous++
+        if (config.optBoolean("Anonymous", false)) {
+            AnonymousAuth.getInstance(activity).init();
+        }
+        //AuthAnonymous--
+        
+        //AuthEmailAndPassword++
+        if (config.optBoolean("EmailPassword", false)) {
+            EmailAndPassword.getInstance(activity).init();
+        }
+        //AuthEmailAndPassword++
 	}
 
 	public void sign_in (final int type_id) {
@@ -103,10 +115,18 @@ public class Auth {
 				TwitterSignIn.getInstance(activity).signIn();
 				break;
 			//AuthTwitter--
+            //AuthAnonymous++
 			case ANONYMOUS_AUTH:
-				Utils.d("Auth:Anonymous:SignIn");
+				Utils.d("GodotFireBase", "Auth:Anonymous:SignIn");
 				AnonymousAuth.getInstance(activity).signIn();
 				break;
+            //AuthAnonymous--
+            //AuthEmailAndPassword++ 
+            case EMAIL_AUTH:
+                Utils.d("GodotFireBase", "Auth:EmailAndPassword:SignIn");
+                EmailAndPassword.getInstance(activity).signIn(args[0], args[1]);
+                break;
+            //AuthEmailAndPassword--
 			default:
 				Utils.d("Auth:Type:NotAvailable");
 				break;
@@ -137,15 +157,31 @@ public class Auth {
 				TwitterSignIn.getInstance(activity).signOut();
 				break;
 			//AuthTwitter--
+			//AuthAnonymous++
 			case ANONYMOUS_AUTH:
-				Utils.d("Auth:Anonymous:SignOut");
+				Utils.d("GodotFireBase", "Auth:Anonymous:SignOut");
 				AnonymousAuth.getInstance(activity).signOut();
 				break;
+            //AuthAnonymous--
+            //AuthEmailAndPassword++
+            case EMAIL_AUTH:
+                Utils.d("GodotFireBase", "Auth:Anonymous:SignOut");
+				EmailAndPassword.getInstance(activity).signOut();
+				break;
+            //AuthEmailAndPassword--
 			default:
 				Utils.d("Auth:Type:NotAvailable.");
 				break;
 		}
 	}
+
+    public void create_account (final int type_id, final String... args) {
+        if (!isInitialized()) { return; }
+        
+        Utils.d("GodotFireBase", "Auth:CreateAccount:TAG:" + type_id);
+        
+        EmailAndPassword.getInstance(activity).createAccount(args[0], args[1]);
+    }
 
 	public void revoke(final int type_id) {
 		if (!isInitialized()) { return; }
@@ -213,6 +249,13 @@ public class Auth {
 		}
 		//AuthFacebook--
 
+        //AuthEmailAndPassword++
+		if (type_id == EMAIL_AUTH && EmailAndPassword.getInstance(activity).isConnected()) {
+			Utils.d("GodotFireBase", "Getting Email user details");
+			return EmailAndPassword.getInstance(activity).getUserDetails();
+		}
+		//AuthEmailAndPassword--
+
 		return "NULL";
 	}
 
@@ -256,9 +299,16 @@ public class Auth {
 				Utils.d("Auth:Status:Facebook:True");
 				return FacebookSignIn.getInstance(activity).isConnected();
 			//AuthFacebook--
+			//AuthAnonymous++
 			case ANONYMOUS_AUTH:
-				Utils.d("Auth:Status:Anonymous:True");
+				Utils.d("GodotFireBase", "Auth:Status:Anonymous");
 				return AnonymousAuth.getInstance(activity).isConnected();
+            //AuthAnonymous--
+            //AuthEmailAndPassword++
+            case EMAIL_AUTH:
+                Utils.d("GodotFireBase", "Auth:Status:EmailAndPassword");
+				return EmailAndPassword.getInstance(activity).isConnected();
+            //AuthEmailAndPassword--
 			default:
 				Utils.d("Auth:Type:NotAvailable");
 				break;
@@ -358,6 +408,17 @@ public class Auth {
 			TwitterSignIn.getInstance(activity).onStop();
 		}
 		//AuthTwitter--
+		//AuthAnonymous++
+		if (config.optBoolean("Anonymous", false)) {
+			AnonymousAuth.getInstance(activity).onStop();
+		}
+		//AuthAnonymous--
+        
+        //AuthEmailAndPassword++
+		if (config.optBoolean("EmailAndPassword", false)) {
+			EmailAndPassword.getInstance(activity).onStop();
+		}
+		//AuthEmailAndPassword--
 	}
 
 	private static Activity activity = null;

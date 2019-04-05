@@ -85,8 +85,14 @@ public class FireBase extends Godot.SingletonBase {
 			"twitter_sign_in", "twitter_sign_out", "is_twitter_connected",
 			//AuthTwitter--
 
+			//AuthAnonymous++
 			"anonymous_sign_in", "anonymous_sign_out", "is_anonymous_connected",
 			"authConfig",
+			//AuthAnonymous--
+
+            //AuthEmailPassword++
+            "email_create_account", "email_sign_in", "email_sign_out", "is_email_connected", "get_email_user",
+            //AuthEmailPassword--
 			//Auth--
 
 			//Notification++
@@ -107,7 +113,7 @@ public class FireBase extends Godot.SingletonBase {
 			//Storage--
 
 			//Firestore++
-			"load_document", "load_document_to", "set_document", "add_document",
+			"load_document", "set_document", "add_document", "set_listener", "remove_listener"
 			//Firestore--
 
 			//Crashlytics++
@@ -605,6 +611,7 @@ public class FireBase extends Godot.SingletonBase {
 	}
 	//AuthFacebook--
 
+    //AuthAnonymous++
 	public void anonymous_sign_in() {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
@@ -624,6 +631,42 @@ public class FireBase extends Godot.SingletonBase {
 	public boolean is_anonymous_connected() {
 		return Auth.getInstance(activity).isConnected(Auth.ANONYMOUS_AUTH);
 	}
+	//AuthAnonymous--
+
+    //AuthEmailPassword++
+    public void email_create_account(final String email, final String password) {
+        activity.runOnUiThread(new Runnable() {
+           public void run() {
+               Auth.getInstance(activity).create_account(Auth.EMAIL_AUTH, new String[]{email, password});
+           } 
+        });
+    }
+    
+    public void email_sign_in(final String email, final String password) {
+        activity.runOnUiThread(new Runnable() {
+           public void run() {
+               Auth.getInstance(activity).sign_in(Auth.EMAIL_AUTH, new String[]{email, password});
+           } 
+        });
+    }
+    
+    public void email_sign_out() {
+        activity.runOnUiThread(new Runnable() {
+           public void run() {
+               Auth.getInstance(activity).sign_out(Auth.EMAIL_AUTH);
+           } 
+        });
+    }
+    
+    public boolean is_email_connected() {
+		return Auth.getInstance(activity).isConnected(Auth.EMAIL_AUTH);
+	}
+    
+    public String get_email_user() {
+		return Auth.getInstance(activity).getUserDetails(Auth.EMAIL_AUTH);
+	}
+    //AuthEmailPassword--
+
 	//Auth--
 
 	/** Extra **/
@@ -803,6 +846,14 @@ public class FireBase extends Godot.SingletonBase {
 			}
 		});
 	}
+
+	public void remove_listener(final String p_col_name, final String p_doc_name) {
+        activity.runOnUiThread(new Runnable() {
+			public void run() {
+				Firestore.getInstance(activity).removeListener(p_col_name, p_doc_name);
+			}
+		});
+    }
 	//Firestore--
 
 	//Crashlytics++

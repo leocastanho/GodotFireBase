@@ -95,47 +95,82 @@ public class EmailAndPassword {
 	}
 
 	public void signIn(final String email, final String password) {
-
+        Utils.d("GodotFireBase", "E&P:SignIn:" + email);
+        
+        mAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Utils.d("GodotFireBase", "E&P:SignIn:Sucess");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    successSignIn(user);
+                } else {
+                    Utils.d("GodotFireBase", "E&P:SignIn:Error:" + task.getException());
+                    Utils.callScriptFunc("E&P", "SignIn", false);
+                }
+            }
+        });
 	}
 
 	public void signOut() {
-		mAuth.signOut();
+        mAuth.signOut();
+        
+        successSignOut();
 	}
 
 	private void successSignIn(FirebaseUser user) {
-		Utils.d("E&P:SignIn:Success");
+		Utils.d("GodotFireBase", "E&P:SignIn:Success");
+        
+        isEmailConnected = true;
+        
+        try {
+			currentEmailUser.put("email", user.getEmail());
+			currentEmailUser.put("uid", user.getUid());
+		} catch (JSONException e) { Utils.d("GodotFireBase", "Email:JSON:Error:" + e.toString()); }
 
-		try {
-			currentEPUser.put("name", user.getDisplayName());
-			currentEPUser.put("email_id", user.getEmail());
-			currentEPUser.put("photo_uri", user.getPhotoUrl());
-		} catch(JSONException e) { Utils.d("E&P:JSON:Parse:Error"); }
-
-		// Utils.callScriptFunc("Auth", "login", "true");
+		Utils.callScriptFunc("Auth", "EmailLogin", true);
 	}
 
-	private void successSignOut() {
-
-		// Utils.callScriptFunc("Auth", "login", "false");
-	}
+    private void successSignOut() {
+        Utils.d("GodotFireBase", "E&P:SignOut:Success");
+        
+        isEmailConnected = false;
+        
+        Utils.callScriptFunc("Auth", "EmailLogin", false);
+    }
 
 	private void sendEmailVerification() {
 
 	}
 
+    public boolean isConnected() {
+        return isEmailConnected;
+    }
+    
+    public String getUserDetails() {
+        return currentEmailUser.toString();
+    }
+
 	public void onStart() {
+        FirebaseUser user = mAuth.getCurrentUser();
+		if (user != null) { successSignIn(user); }
+        
 		mAuth.addAuthStateListener(mAuthListener);
 	}
 
 	public void onStop() {
 		if (mAuthListener != null) { mAuth.removeAuthStateListener(mAuthListener); }
 	}
-
+	
 	private static Activity activity = null;
 	private static EmailAndPassword mInstance = null;
 
 	private FirebaseAuth mAuth;
 	private FirebaseAuth.AuthStateListener mAuthListener;
+    
+    private static boolean isEmailConnected = false;
+    private JSONObject currentEmailUser = new JSONObject();
 
 	private JSONObject currentEPUser = new JSONObject();
 }
