@@ -102,11 +102,11 @@ public class EmailAndPassword {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Utils.d("GodotFireBase", "E&P:SignIn:Sucess");
+                    Utils.d("E&P:SignIn:Sucess");
                     FirebaseUser user = mAuth.getCurrentUser();
                     successSignIn(user);
                 } else {
-                    Utils.d("GodotFireBase", "E&P:SignIn:Error:" + task.getException());
+                    Utils.d("E&P:SignIn:Error:" + task.getException());
                     Utils.callScriptFunc("E&P", "SignIn", false);
                 }
             }
@@ -120,20 +120,20 @@ public class EmailAndPassword {
 	}
 
 	private void successSignIn(FirebaseUser user) {
-		Utils.d("GodotFireBase", "E&P:SignIn:Success");
+		Utils.d("E&P:SignIn:Success");
         
         isEmailConnected = true;
         
         try {
 			currentEmailUser.put("email", user.getEmail());
 			currentEmailUser.put("uid", user.getUid());
-		} catch (JSONException e) { Utils.d("GodotFireBase", "Email:JSON:Error:" + e.toString()); }
+		} catch (JSONException e) { Utils.d("Email:JSON:Error:" + e.toString()); }
 
 		Utils.callScriptFunc("Auth", "EmailLogin", true);
 	}
 
     private void successSignOut() {
-        Utils.d("GodotFireBase", "E&P:SignOut:Success");
+        Utils.d("E&P:SignOut:Success");
         
         isEmailConnected = false;
         
@@ -141,7 +141,23 @@ public class EmailAndPassword {
     }
 
 	private void sendEmailVerification() {
-
+        // Send verification email
+        // [START send_email_verification]
+        final FirebaseUser user = mAuth.getCurrentUser();
+        user.sendEmailVerification()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // [START_EXCLUDE]
+                        if (task.isSuccessful()) {
+							Utils.d("Verification email sent to " + user.getEmail());
+                        } else {
+							Utils.d("Failed to send verification email.");
+                        }
+                        // [END_EXCLUDE]
+                    }
+                });
+        // [END send_email_verification]
 	}
 
     public boolean isConnected() {

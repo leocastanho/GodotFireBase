@@ -117,13 +117,13 @@ public class Auth {
 			//AuthTwitter--
             //AuthAnonymous++
 			case ANONYMOUS_AUTH:
-				Utils.d("GodotFireBase", "Auth:Anonymous:SignIn");
+				Utils.d("Auth:Anonymous:SignIn");
 				AnonymousAuth.getInstance(activity).signIn();
 				break;
             //AuthAnonymous--
             //AuthEmailAndPassword++ 
             case EMAIL_AUTH:
-                Utils.d("GodotFireBase", "Auth:EmailAndPassword:SignIn");
+                Utils.d("Auth:EmailAndPassword:SignIn");
                 EmailAndPassword.getInstance(activity).signIn(args[0], args[1]);
                 break;
             //AuthEmailAndPassword--
@@ -159,13 +159,13 @@ public class Auth {
 			//AuthTwitter--
 			//AuthAnonymous++
 			case ANONYMOUS_AUTH:
-				Utils.d("GodotFireBase", "Auth:Anonymous:SignOut");
+				Utils.d("Auth:Anonymous:SignOut");
 				AnonymousAuth.getInstance(activity).signOut();
 				break;
             //AuthAnonymous--
             //AuthEmailAndPassword++
             case EMAIL_AUTH:
-                Utils.d("GodotFireBase", "Auth:Anonymous:SignOut");
+                Utils.d("Auth:Anonymous:SignOut");
 				EmailAndPassword.getInstance(activity).signOut();
 				break;
             //AuthEmailAndPassword--
@@ -178,9 +178,10 @@ public class Auth {
     public void create_account (final int type_id, final String... args) {
         if (!isInitialized()) { return; }
         
-        Utils.d("GodotFireBase", "Auth:CreateAccount:TAG:" + type_id);
+        Utils.d("Auth:CreateAccount:TAG:" + type_id);
         
         EmailAndPassword.getInstance(activity).createAccount(args[0], args[1]);
+		EmailAndPassword.getInstance(activity).sendEmailVerification();
     }
 
 	public void revoke(final int type_id) {
@@ -251,7 +252,7 @@ public class Auth {
 
         //AuthEmailAndPassword++
 		if (type_id == EMAIL_AUTH && EmailAndPassword.getInstance(activity).isConnected()) {
-			Utils.d("GodotFireBase", "Getting Email user details");
+			Utils.d("Getting Email user details");
 			return EmailAndPassword.getInstance(activity).getUserDetails();
 		}
 		//AuthEmailAndPassword--
@@ -301,12 +302,12 @@ public class Auth {
 			//AuthFacebook--
 			//AuthAnonymous++
 			case ANONYMOUS_AUTH:
-				Utils.d("GodotFireBase", "Auth:Status:Anonymous");
+				Utils.d("Auth:Status:Anonymous");
 				return AnonymousAuth.getInstance(activity).isConnected();
             //AuthAnonymous--
             //AuthEmailAndPassword++
             case EMAIL_AUTH:
-                Utils.d("GodotFireBase", "Auth:Status:EmailAndPassword");
+                Utils.d("Auth:Status:EmailAndPassword");
 				return EmailAndPassword.getInstance(activity).isConnected();
             //AuthEmailAndPassword--
 			default:

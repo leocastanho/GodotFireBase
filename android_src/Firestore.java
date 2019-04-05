@@ -81,11 +81,11 @@ public class Firestore {
     
         listeners = new HashMap<String, ListenerRegistration>();
 
-		Utils.d("GodotFireBase", "Firestore::Initialized");
+		Utils.d("Firestore::Initialized");
 	}
 
 	public void loadDocuments (final String p_name, final int callback_id) {
-		Utils.d("GodotFireBase", "Firestore::LoadData");
+		Utils.d("Firestore::LoadData");
 
 		db.collection(p_name).get()
 		.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -103,11 +103,11 @@ public class Firestore {
 
                         jobject.put(p_name, jobject_1);
 					} catch (JSONException e) {
-						Utils.d("GodotFireBase", "JSON Exception: " + e.toString());
+						Utils.d("JSON Exception: " + e.toString());
 					}
 
                     
-			    	Utils.d("GodotFireBase", "Data: " + jobject.toString());
+			    	Utils.d("Data: " + jobject.toString());
 
                     if (callback_id == -1) {
     					Utils.callScriptFunc(
@@ -118,14 +118,14 @@ public class Firestore {
                     }
 
 				} else {
-					Utils.w("GodotFireBase", "Error getting documents: " + task.getException());
+					Utils.w("Error getting documents: " + task.getException());
 				}
 			}
 		});
 	}
 
 	public void addDocument (final String p_name, final Dictionary p_dict) {
-		Utils.d("GodotFireBase", "Firestore::AddData");
+		Utils.d("Firestore::AddData");
 
 		// Add a new document with a generated ID
 		db.collection(p_name)
@@ -133,13 +133,13 @@ public class Firestore {
 		.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
 			@Override
 			public void onSuccess(DocumentReference documentReference) {
-				Utils.d("GodotFireBase", "DocumentSnapshot added with ID: " + documentReference.getId());
+				Utils.d("DocumentSnapshot added with ID: " + documentReference.getId());
 				Utils.callScriptFunc("Firestore", "DocumentAdded", true);
 			}
 		}).addOnFailureListener(new OnFailureListener() {
 			@Override
 			public void onFailure(@NonNull Exception e) {
-				Utils.w("GodotFireBase", "Error adding document: " + e);
+				Utils.w("Error adding document: " + e);
 				Utils.callScriptFunc("Firestore", "DocumentAdded", false);
 			}
 		});
@@ -151,13 +151,13 @@ public class Firestore {
 		.addOnSuccessListener(new OnSuccessListener<Void>() {
 			@Override
 			public void onSuccess(Void aVoid) {
-				Utils.d("GodotFireBase", "DocumentSnapshot successfully written!");
+				Utils.d("DocumentSnapshot successfully written!");
 				Utils.callScriptFunc("Firestore", "DocumentAdded", true);
 			}
 		}).addOnFailureListener(new OnFailureListener() {
 			@Override
 			public void onFailure(@NonNull Exception e) {
-				Utils.w("GodotFireBase", "Error adding document: " + e);
+				Utils.w("Error adding document: " + e);
 				Utils.callScriptFunc("Firestore", "DocumentAdded", false);
 			}
 		});
@@ -166,22 +166,22 @@ public class Firestore {
     
     public void setListener(final String p_col_name, final String p_doc_name){
         if (listeners.containsKey(p_col_name + "/" + p_doc_name)) {
-            Utils.d("GodotFireBase", "Listener already created!");
+            Utils.d("Listener already created!");
             return;
         }
         listeners.put(p_col_name + "/" + p_doc_name,db.collection(p_col_name).document(p_doc_name).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    Utils.w("GodotFireBase", "Error seting listener: " + e);
+                    Utils.w("Error seting listener: " + e);
                     return;
                 }
 
                 if (snapshot != null && snapshot.exists()) {
-                    Utils.d("GodotFireBase", "Current data: " + snapshot.getData());
+                    Utils.d("Current data: " + snapshot.getData());
                     Utils.callScriptFunc("Firestore", "SnapshotData", new JSONObject(snapshot.getData()).toString());
                 } else {
-                    Utils.d("GodotFireBase", "Current data: null");
+                    Utils.d("Current data: null");
                     Utils.callScriptFunc("Firestore", "SnapshotData", "");
                 }
             }
@@ -192,7 +192,7 @@ public class Firestore {
         if (listeners.containsKey(p_col_name + "/" + p_doc_name)){
             listeners.get(p_col_name + "/" + p_doc_name).remove();
             listeners.remove(p_col_name + "/" + p_doc_name);
-            Utils.d("GodotFireBase", "Listener removed!");
+            Utils.d("Listener removed!");
         }
     }
 
