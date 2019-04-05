@@ -91,7 +91,7 @@ public class Auth {
         //AuthEmailAndPassword++
 	}
 
-	public void sign_in (final int type_id) {
+	public void sign_in (final int type_id, final String... args) {
 		if (!isInitialized()) { return; }
 
 		Utils.d("Auth:SignIn:TAG:" + type_id);
@@ -181,7 +181,7 @@ public class Auth {
         Utils.d("Auth:CreateAccount:TAG:" + type_id);
         
         EmailAndPassword.getInstance(activity).createAccount(args[0], args[1]);
-		EmailAndPassword.getInstance(activity).sendEmailVerification();
+		// EmailAndPassword.getInstance(activity).sendEmailVerification();
     }
 
 	public void revoke(final int type_id) {

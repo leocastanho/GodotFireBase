@@ -95,7 +95,7 @@ public class EmailAndPassword {
 	}
 
 	public void signIn(final String email, final String password) {
-        Utils.d("GodotFireBase", "E&P:SignIn:" + email);
+        Utils.d("E&P:SignIn:" + email);
         
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
@@ -140,25 +140,25 @@ public class EmailAndPassword {
         Utils.callScriptFunc("Auth", "EmailLogin", false);
     }
 
-	private void sendEmailVerification() {
-        // Send verification email
-        // [START send_email_verification]
-        final FirebaseUser user = mAuth.getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        if (task.isSuccessful()) {
-							Utils.d("Verification email sent to " + user.getEmail());
-                        } else {
-							Utils.d("Failed to send verification email.");
-                        }
-                        // [END_EXCLUDE]
-                    }
-                });
-        // [END send_email_verification]
-	}
+	// public void sendEmailVerification() {
+    //     // Send verification email
+    //     // [START send_email_verification]
+    //     final FirebaseUser user = mAuth.getCurrentUser();
+    //     user.sendEmailVerification()
+    //             .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+    //                 @Override
+    //                 public void onComplete(@NonNull Task<Void> task) {
+    //                     // [START_EXCLUDE]
+    //                     if (task.isSuccessful()) {
+	// 						Utils.d("Verification email sent to " + user.getEmail());
+    //                     } else {
+	// 						Utils.d("Failed to send verification email.");
+    //                     }
+    //                     // [END_EXCLUDE]
+    //                 }
+    //             });
+    //     // [END send_email_verification]
+	// }
 
     public boolean isConnected() {
         return isEmailConnected;
