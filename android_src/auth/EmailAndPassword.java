@@ -82,13 +82,18 @@ public class EmailAndPassword {
 			@Override
 			public void onComplete(@NonNull Task<AuthResult> task) {
 				Utils.d("E&P:CreateUserWithEmail:onComplete:" + task.isSuccessful());
+                if (task.isSuccessful()) {
 
-				// If sign in fails, display a message to the user. If sign in succeeds
-				// the auth state listener will be notified and logic to handle the
-				// signed in user can be handled in the listener.
+					FirebaseUser user = mAuth.getCurrentUser();
+					successSignIn(user);
+					
+					// If sign in fails, display a message to the user. If sign in succeeds
+					// the auth state listener will be notified and logic to handle the
+					// signed in user can be handled in the listener.
 
-				if (!task.isSuccessful()) {
+				} else {
 					Utils.d("E&P:CreateAccount:Error");
+					Utils.callScriptFunc("E&P", "CreateAccount", false);
 				}
 			}
 		});
