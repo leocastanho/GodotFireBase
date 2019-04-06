@@ -91,7 +91,7 @@ public class EmailAndPassword {
 					// the auth state listener will be notified and logic to handle the
 					// signed in user can be handled in the listener.
 
-				} else (!task.isSuccessful()) {
+				} else {
 					Utils.d("E&P:CreateAccount:Error");
 					Utils.callScriptFunc("E&P", "CreateAccount", false);
 				}
