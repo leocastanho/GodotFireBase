@@ -847,6 +847,15 @@ public class FireBase extends Godot.SingletonBase {
 		});
 	}
 
+    public void set_listener(final String p_col_name, final String p_doc_name) {
+        activity.runOnUiThread(new Runnable() {
+			public void run() {
+				Firestore.getInstance(activity).setListener(p_col_name, p_doc_name);
+			}
+		});
+    }
+    
+
 	public void remove_listener(final String p_col_name, final String p_doc_name) {
         activity.runOnUiThread(new Runnable() {
 			public void run() {

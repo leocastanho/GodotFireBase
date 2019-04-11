@@ -145,6 +145,9 @@ public class EmailAndPassword {
         Utils.callScriptFunc("Auth", "EmailLogin", false);
     }
 
+	//if you want to implement it, use this guide sendEmailVerification
+	//https://stackoverflow.com/questions/40404567/how-to-send-verification-email-with-firebase
+
 	// public void sendEmailVerification() {
     //     // Send verification email
     //     // [START send_email_verification]
