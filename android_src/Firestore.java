@@ -145,6 +145,30 @@ public class Firestore {
 		});
 	}
 
+	public void deleteDocument(final String p_col_name, final String p_doc_name) throws Exception {
+		Utils.d("Firestore: delete document");
+
+		db.collection(p_col_name)
+		.document(p_doc_name)
+		.get()
+		.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+			@Override
+			public void onSuccess(DocumentReference documentReference) {
+				Utils.d("DocumentDeleted: " + p_doc_name);
+				Utils.callScriptFunc("Firestore", "DocumentDeleted", true);
+			}
+		}).addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				Utils.w("Error deleting document: " + e);
+				Utils.callScriptFunc("Firestore", "DocumentDeleted", false);
+			}
+		});
+
+		ApiFuture<WriteResult> writeResult = db.collection(p_col_name).document(p_doc_name).delete();
+
+	}
+
 	public void setData(final String p_col_name, final String p_doc_name, final Dictionary p_dict) {
 		db.collection(p_col_name).document(p_doc_name)
 		.set(p_dict, SetOptions.merge())

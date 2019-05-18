@@ -113,7 +113,7 @@ public class FireBase extends Godot.SingletonBase {
 			//Storage--
 
 			//Firestore++
-			"load_document", "set_document", "add_document", "set_listener", "remove_listener"
+			"load_document", "set_document", "add_document", "delete_document", "set_listener", "remove_listener"
 			//Firestore--
 
 			//Crashlytics++
@@ -831,6 +831,14 @@ public class FireBase extends Godot.SingletonBase {
 		});
 	}
 
+	public void delete_document	(final String p_col_name, final String p_doc_name) {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				Firestore.getInstance(activity).addDocument(p_col_name, p_doc_name);
+			}
+		});
+	}
+	
 	public void load_document(final String p_name) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
