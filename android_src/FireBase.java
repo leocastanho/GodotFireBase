@@ -834,7 +834,7 @@ public class FireBase extends Godot.SingletonBase {
 	public void delete_document	(final String p_col_name, final String p_doc_name) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
-				Firestore.getInstance(activity).addDocument(p_col_name, p_doc_name);
+				Firestore.getInstance(activity).deleteDocument(p_col_name, p_doc_name);
 			}
 		});
 	}
